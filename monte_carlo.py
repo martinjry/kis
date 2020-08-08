@@ -6,6 +6,8 @@ from kislib.dart import get_company_code
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+from scipy.stats import norm
+from tabulate import tabulate
 #종목선정하고 spot_price 및 90일 평균, 변동성 가져오기
 company_name='SK하이닉스' #ui에서 input값으로 가져오기
 stock_df=company_list()#종목정보 가져오기
@@ -22,6 +24,11 @@ st = close_price[0]*np.exp((mean-0.5*sigma**2)*T+sigma*np.sqrt(T)*np.random.rand
 # plt.xlabel('price at maturity')
 # plt.ylabel('frequency')
 # plt.show() #로그정규분포 skweed positive
+#VaR
+var_90 = norm.ppf(1-0.9,mean,sigma)
+var_95 = norm.ppf(1-0.95,mean,sigma)
+var_99 = norm.ppf(1-0.99,mean,sigma)
+print(tabulate([['90%',var_90],['95%',var_95],['99%',var_99]],headers=['confidence level','value at risk']))
 
 #몬테카를로
 D = 252
